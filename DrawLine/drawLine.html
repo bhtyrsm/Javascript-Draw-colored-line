@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Jquery Draw colored line</title>
+    <link href="Boostrap/Css/bootstrap.min.css" rel="stylesheet" />
+    <script src="Boostrap/Js/bootstrap.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Boostrap/Js/bootstrap.min.js"></script>
+
+     <style>
+         .Colors{
+             height:48px;
+             border: 3px solid black;
+             margin-left:3px;
+             margin:auto;
+            
+         }
+
+         .Colors:hover{
+             border: 2px double red;
+             display:inline-block
+         }
+
+
+     </style>
+
+    <script type="text/javascript">
+        var myCanvas, dim, flag = false,
+        preX = 0,
+        curX = 0,
+        PreY = 0,
+        curY = 0;
+       
+    var selectedColor = ""
+    var lineWidth = 2;
+    var defaultColor = "black"
+     
+    
+    function init() {
+        myCanvas = document.getElementById('myCanvas');
+        dim = myCanvas.getContext("2d");
+       
+
+        myCanvas.addEventListener("mousemove", function (e) {
+            if (flag) {
+                preX = curX;
+                PreY = curY;
+                curX = e.clientX - myCanvas.offsetLeft;
+                curY = e.clientY - myCanvas.offsetTop;
+                draw();
+            }
+        }, false);
+        myCanvas.addEventListener("mousedown", function (e) {
+            preX = curX;
+            PreY = curY;
+            curX = e.clientX - myCanvas.offsetLeft;
+            curY = e.clientY - myCanvas.offsetTop;
+
+            dim.beginPath();
+            dim.fillStyle = selectedColor;
+            dim.fillRect(curX, curY, 2, 2);
+            dim.closePath();
+            flag = true;
+            
+        }, false);
+        myCanvas.addEventListener("mouseup", function (e) {
+            flag = false;
+        }, false);
+        myCanvas.addEventListener("mouseout", function (e) {
+            flag = false;
+        }, false);
+    }
+    
+    function WhichColor(obj) {
+        if (obj == "") {
+            selectedColor=defaultColor
+        } else {
+            selectedColor=obj
+        }
+    }
+    
+    function draw() {
+        dim.beginPath();
+        dim.moveTo(preX , PreY);
+        dim.lineTo(curX, curY);
+        dim.strokeStyle = selectedColor;
+        dim.lineWidth = lineWidth;
+        dim.stroke();
+        dim.closePath();
+    }
+    
+    
+  
+    </script>
+
+
+</head>
+<body style="background-color:#f6efef" onload="init()">
+  
+    <div class="card" style="width:750px;height:55px;margin:auto;margin-top:20px;">
+        <div class="row" style="width:%90;height:50px">
+            <div class="card col-md-1 Colors" id="blue" style="background-color:blue" onclick="WhichColor(this.id)" ></div>
+            <div class="card col-md-1 Colors" id="green" style="background-color :green" onclick="WhichColor(this.id)" ></div>
+            <div class="card col-md-1 Colors" id="yellow" style="background-color:yellow" onclick="WhichColor(this.id)"></div>
+            <div class="card col-md-1 Colors" id="black" style ="background-color:black" onclick="WhichColor(this.id)"></div>
+            <div class="card col-md-1 Colors" id="red" style="background-color:red" onclick="WhichColor(this.id)"></div>
+            <div class="card col-md-1 Colors" id="pink" style="background-color:pink" onclick="WhichColor(this.id)"></div>
+        </div>
+    </div>
+   <canvas id="myCanvas" width="500" height="500" style= "position:absolute;  left:35%; border:2px solid;"></canvas>
+</body>
+</html>
